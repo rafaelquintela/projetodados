@@ -11,7 +11,7 @@ const rl = readline.createInterface({
 const pedidos = [];
 const arvore = new BinaryTree();
 
-// Mostra as opções do programa
+// Mostra  opções do programa
 function mostrarMenu() {
     console.log("\n==============================");
     console.log("      GERENCIADOR DE PEDIDOS");

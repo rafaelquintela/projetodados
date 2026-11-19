@@ -42,7 +42,7 @@ class BinaryTree {
         }
     }
 
-    // Pré-ordem: raiz, esquerda e direita
+    // Pré-ordem: raiz,esquerda e direita
     preOrder(node = this.root) {
         if (node !== null) {
             node.data.mostrarInfo(1);

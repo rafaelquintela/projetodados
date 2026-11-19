@@ -252,7 +252,7 @@ function imprimirEmOrdem(arvore, iniciar) {
     console.log("\n===== EM ORDEM =====");
 
     if (arvore.isEmpty()) {
-        console.log("Árvore vazia.");
+        console.log("Árvore vaazia.");
     } else {
         arvore.inOrder();
     }
