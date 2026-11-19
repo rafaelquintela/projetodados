@@ -6,19 +6,16 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
+// Classe que guarda as informações de cada pedido
 class Pedido {
-    constructor(
-        cliente = "",
-        produto = "",
-        preco = 0,
-        status = "Pendente"
-    ) {
+    constructor(cliente = "", produto = "", preco = 0, status = "Pendente") {
         this.cliente = cliente;
         this.produto = produto;
         this.preco = preco;
         this.status = status;
     }
 
+    // Mostra os dados do pedido
     mostrarInfo(numero) {
         console.log(
             `${numero}. Cliente: ${this.cliente} | ` +
@@ -37,11 +34,7 @@ class Pedido {
     }
 }
 
-
-// =================================
-// ÁRVORE BINÁRIA DE BUSCA
-// =================================
-
+// Classe que representa cada nó da árvore
 class Node {
     constructor(data) {
         this.data = data;
@@ -50,15 +43,18 @@ class Node {
     }
 }
 
+// Árvore binária de busca
 class BinaryTree {
     constructor() {
         this.root = null;
     }
 
+    // Verifica se a árvore está vazia
     isEmpty() {
         return this.root === null;
     }
 
+    // Insere um pedido na árvore
     insert(data) {
         const newNode = new Node(data);
 
@@ -70,18 +66,15 @@ class BinaryTree {
         this.insertRecursive(this.root, newNode);
     }
 
+    // Procura o lugar certo para inserir o novo nó
     insertRecursive(currentNode, newNode) {
-
         if (newNode.data.preco < currentNode.data.preco) {
-
             if (currentNode.left === null) {
                 currentNode.left = newNode;
             } else {
                 this.insertRecursive(currentNode.left, newNode);
             }
-
         } else {
-
             if (currentNode.right === null) {
                 currentNode.right = newNode;
             } else {
@@ -90,62 +83,45 @@ class BinaryTree {
         }
     }
 
-    // PRÉ-ORDEM: RAIZ, ESQUERDA, DIREITA
+    // Percurso pré-ordem: raiz, esquerda e direita
     preOrder(node = this.root) {
-
         if (node !== null) {
             node.data.mostrarInfo(1);
-
             this.preOrder(node.left);
             this.preOrder(node.right);
         }
     }
 
-    // EM ORDEM: ESQUERDA, RAIZ, DIREITA
+    // Percurso em ordem: esquerda, raiz e direita
     inOrder(node = this.root) {
-
         if (node !== null) {
             this.inOrder(node.left);
-
             node.data.mostrarInfo(1);
-
             this.inOrder(node.right);
         }
     }
 
-    // PÓS-ORDEM: ESQUERDA, DIREITA, RAIZ
+    // Percurso pós-ordem: esquerda, direita e raiz
     postOrder(node = this.root) {
-
         if (node !== null) {
             this.postOrder(node.left);
-
             this.postOrder(node.right);
-
             node.data.mostrarInfo(1);
         }
     }
 
-    // LIMPAR A ÁRVORE
+    // Apaga todos os nós da árvore
     clear() {
         this.root = null;
     }
 }
 
-
-// =================================
-// LISTAS E VARIÁVEIS
-// =================================
-
+// Lista onde ficam armazenados os pedidos
 const pedidos = [];
 const arvore = new BinaryTree();
 
-
-// =================================
-// SINCRONIZAR ÁRVORE
-// =================================
-
+// Atualiza a árvore com os pedidos cadastrados
 function atualizarArvore() {
-
     arvore.clear();
 
     pedidos.forEach((pedido) => {
@@ -153,17 +129,11 @@ function atualizarArvore() {
     });
 }
 
-
-// =================================
-// MOSTRAR MENU
-// =================================
-
+// Mostra as opções do programa
 function mostrarMenu() {
-
     console.log("\n==============================");
     console.log("      GERENCIADOR DE PEDIDOS");
     console.log("==============================");
-
     console.log("1 - Adicionar pedido");
     console.log("2 - Listar pedidos");
     console.log("3 - Marcar como entregue");
@@ -173,28 +143,16 @@ function mostrarMenu() {
     console.log("7 - Mostrar valor total");
     console.log("8 - Mostrar pedidos pendentes");
     console.log("9 - Sair");
-
-    console.log("------------------------------");
-    console.log("      ÁRVORE BINÁRIA");
-    console.log("------------------------------");
-
     console.log("10 - Inserir pedidos na árvore");
     console.log("11 - Imprimir em pré-ordem");
     console.log("12 - Imprimir em ordem");
     console.log("13 - Imprimir em pós-ordem");
-
     console.log("==============================");
 }
 
-
-// =================================
-// ADICIONAR PEDIDO
-// =================================
-
+// Cadastra um novo pedido
 function adicionarPedido() {
-
     rl.question("\nNome do cliente: ", (cliente) => {
-
         if (cliente.trim() === "") {
             console.log("\nO nome do cliente não pode estar vazio.");
             iniciar();
@@ -202,7 +160,6 @@ function adicionarPedido() {
         }
 
         rl.question("Produto: ", (produto) => {
-
             if (produto.trim() === "") {
                 console.log("\nO produto não pode estar vazio.");
                 iniciar();
@@ -210,7 +167,6 @@ function adicionarPedido() {
             }
 
             rl.question("Preço: R$ ", (valor) => {
-
                 const preco = Number(valor);
 
                 if (!Number.isFinite(preco) || preco < 0) {
@@ -226,30 +182,22 @@ function adicionarPedido() {
                 );
 
                 pedidos.push(novoPedido);
-
                 atualizarArvore();
 
                 console.log("\nPedido adicionado com sucesso!");
-
                 iniciar();
             });
         });
     });
 }
 
-
-// =================================
-// LISTAR PEDIDOS
-// =================================
-
+// Exibe todos os pedidos cadastrados
 function listarPedidos() {
-
     console.log("\n===== TODOS OS PEDIDOS =====");
 
     if (pedidos.length === 0) {
         console.log("Nenhum pedido cadastrado.");
     } else {
-
         pedidos.forEach((pedido, indice) => {
             pedido.mostrarInfo(indice + 1);
         });
@@ -258,13 +206,8 @@ function listarPedidos() {
     iniciar();
 }
 
-
-// =================================
-// MOSTRAR PEDIDOS
-// =================================
-
+// Mostra os pedidos para escolher um número
 function mostrarPedidos() {
-
     console.log("\n===== PEDIDOS =====");
 
     pedidos.forEach((pedido, indice) => {
@@ -272,13 +215,8 @@ function mostrarPedidos() {
     });
 }
 
-
-// =================================
-// MARCAR COMO ENTREGUE
-// =================================
-
+// Altera o status do pedido para entregue
 function marcarEntregue() {
-
     if (pedidos.length === 0) {
         console.log("\nNenhum pedido cadastrado.");
         iniciar();
@@ -287,47 +225,30 @@ function marcarEntregue() {
 
     mostrarPedidos();
 
-    rl.question(
-        "\nDigite o número do pedido entregue: ",
-        (numero) => {
+    rl.question("\nDigite o número do pedido entregue: ", (numero) => {
+        const indice = Number(numero) - 1;
 
-            const indice = Number(numero) - 1;
-
-            if (
-                Number.isInteger(indice) &&
-                indice >= 0 &&
-                indice < pedidos.length
-            ) {
-
-                if (pedidos[indice].status === "Cancelado") {
-
-                    console.log(
-                        "\nNão é possível entregar um pedido cancelado."
-                    );
-
-                } else {
-
-                    pedidos[indice].entregar();
-
-                    console.log("\nPedido marcado como entregue!");
-                }
-
+        if (
+            Number.isInteger(indice) &&
+            indice >= 0 &&
+            indice < pedidos.length
+        ) {
+            if (pedidos[indice].status === "Cancelado") {
+                console.log("\nNão é possível entregar um pedido cancelado.");
             } else {
-                console.log("\nNúmero de pedido inválido.");
+                pedidos[indice].entregar();
+                console.log("\nPedido marcado como entregue!");
             }
-
-            iniciar();
+        } else {
+            console.log("\nNúmero de pedido inválido.");
         }
-    );
+
+        iniciar();
+    });
 }
 
-
-// =================================
-// CANCELAR PEDIDO
-// =================================
-
+// Cancela um pedido que ainda não foi entregue
 function cancelarPedido() {
-
     if (pedidos.length === 0) {
         console.log("\nNenhum pedido cadastrado.");
         iniciar();
@@ -336,49 +257,30 @@ function cancelarPedido() {
 
     mostrarPedidos();
 
-    rl.question(
-        "\nDigite o número do pedido que deseja cancelar: ",
-        (numero) => {
+    rl.question("\nDigite o número do pedido que deseja cancelar: ", (numero) => {
+        const indice = Number(numero) - 1;
 
-            const indice = Number(numero) - 1;
-
-            if (
-                Number.isInteger(indice) &&
-                indice >= 0 &&
-                indice < pedidos.length
-            ) {
-
-                if (pedidos[indice].status === "Entregue") {
-
-                    console.log(
-                        "\nNão é possível cancelar um pedido entregue."
-                    );
-
-                } else {
-
-                    pedidos[indice].cancelar();
-
-                    console.log(
-                        "\nPedido cancelado com sucesso!"
-                    );
-                }
-
+        if (
+            Number.isInteger(indice) &&
+            indice >= 0 &&
+            indice < pedidos.length
+        ) {
+            if (pedidos[indice].status === "Entregue") {
+                console.log("\nNão é possível cancelar um pedido entregue.");
             } else {
-                console.log("\nNúmero de pedido inválido.");
+                pedidos[indice].cancelar();
+                console.log("\nPedido cancelado com sucesso!");
             }
-
-            iniciar();
+        } else {
+            console.log("\nNúmero de pedido inválido.");
         }
-    );
+
+        iniciar();
+    });
 }
 
-
-// =================================
-// REMOVER PEDIDO
-// =================================
-
+// Remove um pedido da lista
 function removerPedido() {
-
     if (pedidos.length === 0) {
         console.log("\nNenhum pedido cadastrado.");
         iniciar();
@@ -387,90 +289,61 @@ function removerPedido() {
 
     mostrarPedidos();
 
-    rl.question(
-        "\nDigite o número do pedido que deseja remover: ",
-        (numero) => {
+    rl.question("\nDigite o número do pedido que deseja remover: ", (numero) => {
+        const indice = Number(numero) - 1;
 
-            const indice = Number(numero) - 1;
+        if (
+            Number.isInteger(indice) &&
+            indice >= 0 &&
+            indice < pedidos.length
+        ) {
+            const pedidoRemovido = pedidos.splice(indice, 1);
 
-            if (
-                Number.isInteger(indice) &&
-                indice >= 0 &&
-                indice < pedidos.length
-            ) {
+            atualizarArvore();
 
-                const pedidoRemovido = pedidos.splice(indice, 1);
-
-                atualizarArvore();
-
-                console.log(
-                    `\nPedido de "${pedidoRemovido[0].cliente}" removido com sucesso!`
-                );
-
-            } else {
-                console.log("\nNúmero de pedido inválido.");
-            }
-
-            iniciar();
+            console.log(
+                `\nPedido de "${pedidoRemovido[0].cliente}" removido com sucesso!`
+            );
+        } else {
+            console.log("\nNúmero de pedido inválido.");
         }
-    );
+
+        iniciar();
+    });
 }
 
-
-// =================================
-// BUSCAR CLIENTE
-// =================================
-
+// Procura os pedidos pelo nome do cliente
 function buscarCliente() {
-
     if (pedidos.length === 0) {
         console.log("\nNenhum pedido cadastrado.");
         iniciar();
         return;
     }
 
-    rl.question(
-        "\nDigite o nome do cliente: ",
-        (nome) => {
+    rl.question("\nDigite o nome do cliente: ", (nome) => {
+        const nomeBusca = nome.trim().toLowerCase();
 
-            const nomeBusca = nome.trim().toLowerCase();
+        console.log("\n===== RESULTADO DA BUSCA =====");
 
-            console.log("\n===== RESULTADO DA BUSCA =====");
+        let encontrados = 0;
 
-            let encontrados = 0;
-
-            pedidos.forEach((pedido, indice) => {
-
-                if (
-                    pedido.cliente
-                        .toLowerCase()
-                        .includes(nomeBusca)
-                ) {
-
-                    pedido.mostrarInfo(indice + 1);
-
-                    encontrados++;
-                }
-            });
-
-            if (encontrados === 0) {
-                console.log(
-                    "Nenhum pedido encontrado para esse cliente."
-                );
+        pedidos.forEach((pedido, indice) => {
+            if (pedido.cliente.toLowerCase().includes(nomeBusca)) {
+                pedido.mostrarInfo(indice + 1);
+                encontrados++;
             }
+        });
 
-            iniciar();
+        if (encontrados === 0) {
+            console.log("Nenhum pedido encontrado para esse cliente.");
         }
-    );
+
+        iniciar();
+    });
 }
 
-
-// =================================
-// MOSTRAR VALOR TOTAL
-// =================================
-
+// Soma os valores dos pedidos que não foram cancelados
 function mostrarValorTotal() {
-
     if (pedidos.length === 0) {
         console.log("\nNenhum pedido cadastrado.");
         iniciar();
@@ -480,26 +353,18 @@ function mostrarValorTotal() {
     let total = 0;
 
     pedidos.forEach((pedido) => {
-
         if (pedido.status !== "Cancelado") {
             total += pedido.preco;
         }
     });
 
-    console.log(
-        `\nValor total dos pedidos: R$ ${total.toFixed(2)}`
-    );
+    console.log(`\nValor total dos pedidos: R$ ${total.toFixed(2)}`);
 
     iniciar();
 }
 
-
-// =================================
-// MOSTRAR PEDIDOS PENDENTES
-// =================================
-
+// Mostra somente os pedidos que ainda estão pendentes
 function mostrarPendentes() {
-
     if (pedidos.length === 0) {
         console.log("\nNenhum pedido cadastrado.");
         iniciar();
@@ -511,11 +376,8 @@ function mostrarPendentes() {
     let encontrados = 0;
 
     pedidos.forEach((pedido, indice) => {
-
         if (pedido.status === "Pendente") {
-
             pedido.mostrarInfo(indice + 1);
-
             encontrados++;
         }
     });
@@ -527,13 +389,8 @@ function mostrarPendentes() {
     iniciar();
 }
 
-
-// =================================
-// INSERIR PEDIDOS NA ÁRVORE
-// =================================
-
+// Coloca os pedidos cadastrados na árvore
 function inserirNaArvore() {
-
     if (pedidos.length === 0) {
         console.log("\nNenhum pedido cadastrado.");
         iniciar();
@@ -542,19 +399,13 @@ function inserirNaArvore() {
 
     atualizarArvore();
 
-    console.log("\nPedidos inseridos na árvore binária!");
-
+    console.log("\nPedidos inseridos na árvore!");
     iniciar();
 }
 
-
-// =================================
-// IMPRIMIR PRÉ-ORDEM
-// =================================
-
+// Mostra a árvore começando pela raiz
 function imprimirPreOrdem() {
-
-    console.log("\n===== ÁRVORE EM PRÉ-ORDEM =====");
+    console.log("\n===== PRÉ-ORDEM =====");
 
     if (arvore.isEmpty()) {
         console.log("Árvore vazia.");
@@ -565,14 +416,9 @@ function imprimirPreOrdem() {
     iniciar();
 }
 
-
-// =================================
-// IMPRIMIR EM ORDEM
-// =================================
-
+// Mostra os pedidos em ordem crescente de preço
 function imprimirEmOrdem() {
-
-    console.log("\n===== ÁRVORE EM ORDEM =====");
+    console.log("\n===== EM ORDEM =====");
 
     if (arvore.isEmpty()) {
         console.log("Árvore vazia.");
@@ -583,14 +429,9 @@ function imprimirEmOrdem() {
     iniciar();
 }
 
-
-// =================================
-// IMPRIMIR PÓS-ORDEM
-// =================================
-
+// Mostra a raiz por último
 function imprimirPosOrdem() {
-
-    console.log("\n===== ÁRVORE EM PÓS-ORDEM =====");
+    console.log("\n===== PÓS-ORDEM =====");
 
     if (arvore.isEmpty()) {
         console.log("Árvore vazia.");
@@ -601,91 +442,71 @@ function imprimirPosOrdem() {
     iniciar();
 }
 
-
-// =================================
-// INÍCIO DO PROGRAMA
-// =================================
-
+// Controla as opções escolhidas no menu
 function iniciar() {
-
     mostrarMenu();
 
-    rl.question(
-        "Escolha uma opção: ",
-        (opcao) => {
+    rl.question("Escolha uma opção: ", (opcao) => {
+        switch (opcao.trim()) {
+            case "1":
+                adicionarPedido();
+                break;
 
-            switch (opcao.trim()) {
+            case "2":
+                listarPedidos();
+                break;
 
-                case "1":
-                    adicionarPedido();
-                    break;
+            case "3":
+                marcarEntregue();
+                break;
 
-                case "2":
-                    listarPedidos();
-                    break;
+            case "4":
+                cancelarPedido();
+                break;
 
-                case "3":
-                    marcarEntregue();
-                    break;
+            case "5":
+                removerPedido();
+                break;
 
-                case "4":
-                    cancelarPedido();
-                    break;
+            case "6":
+                buscarCliente();
+                break;
 
-                case "5":
-                    removerPedido();
-                    break;
+            case "7":
+                mostrarValorTotal();
+                break;
 
-                case "6":
-                    buscarCliente();
-                    break;
+            case "8":
+                mostrarPendentes();
+                break;
 
-                case "7":
-                    mostrarValorTotal();
-                    break;
+            case "9":
+                console.log("\nPrograma encerrado. Até mais!");
+                rl.close();
+                break;
 
-                case "8":
-                    mostrarPendentes();
-                    break;
+            case "10":
+                inserirNaArvore();
+                break;
 
-                case "9":
+            case "11":
+                imprimirPreOrdem();
+                break;
 
-                    console.log(
-                        "\nPrograma encerrado. Até mais!"
-                    );
+            case "12":
+                imprimirEmOrdem();
+                break;
 
-                    rl.close();
-                    break;
+            case "13":
+                imprimirPosOrdem();
+                break;
 
-                case "10":
-                    inserirNaArvore();
-                    break;
-
-                case "11":
-                    imprimirPreOrdem();
-                    break;
-
-                case "12":
-                    imprimirEmOrdem();
-                    break;
-
-                case "13":
-                    imprimirPosOrdem();
-                    break;
-
-                default:
-
-                    console.log(
-                        "\nOpção inválida. Escolha uma opção de 1 a 13."
-                    );
-
-                    iniciar();
-            }
+            default:
+                console.log("\nOpção inválida. Escolha uma opção de 1 a 13.");
+                iniciar();
         }
-    );
+    });
 }
 
-
-// EXECUTAR PROGRAMA
-
+// Inicia o programa
 iniciar();
